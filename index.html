@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jahir Vera | Desarrollador Backend</title>
+    <style>
+      :root {
+        --dark: #0a0a0a;
+        --dark-secondary: #121212;
+        --light: #e0e0e0;
+        --light-secondary: #a0a0a0;
+        --primary: #4ecdc4;
+        --primary-dark: #3aa8a1;
+        --secondary: #ff6b6b;
+        --accent-blue: #1e88e5;
+        --accent-yellow: #ffd166;
+        --accent-green: #06d6a0;
+        --card-bg: #292929;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", system-ui, sans-serif;
+      }
+
+      body {
+        background-color: var(--dark);
+        color: var(--light);
+        transition: all 0.5s;
+      }
+
+      /* Animaciones */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Estilos generales */
+      section {
+        min-height: 100vh;
+        padding: 100px 10%;
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+      }
+
+      section:nth-child(odd) {
+        background-color: var(--dark);
+      }
+
+      section:nth-child(even) {
+        background-color: var(--dark-secondary);
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: var(--primary);
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      h1::after,
+      h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--accent-blue));
+      }
+
+      p {
+        line-height: 1.8;
+        margin-bottom: 20px;
+        color: var(--light-secondary);
+      }
+
+      a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: all 0.3s;
+        font-weight: 500;
+      }
+
+      a:hover {
+        color: var(--accent-blue);
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background: linear-gradient(135deg, var(--primary), var(--accent-blue));
+        color: white;
+        border-radius: 30px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(78, 205, 196, 0.4);
+        background: linear-gradient(
+          135deg,
+          var(--primary-dark),
+          var(--primary)
+        );
+      }
+
+      /* Header */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 25px 10%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        background-color: rgba(18, 18, 18, 0.9);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s;
+      }
+
+      header.scrolled {
+        padding: 15px 10%;
+        background-color: rgba(18, 18, 18, 0.95);
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary);
+      }
+
+      .logo span {
+        color: var(--light);
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+      }
+
+      nav ul li {
+        margin-left: 30px;
+      }
+
+      nav ul li a {
+        position: relative;
+        padding: 5px 0;
+        color: var(--light);
+      }
+
+      nav ul li a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--primary);
+        transition: width 0.3s;
+      }
+
+      nav ul li a:hover::after {
+        width: 100%;
+      }
+
+      .menu-toggle {
+        display: none;
+        cursor: pointer;
+        font-size: 24px;
+        color: var(--light);
+      }
+
+      /* Hero Section */
+      #hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 150px;
+        background: linear-gradient(
+            135deg,
+            rgba(10, 10, 10, 0.9),
+            rgba(10, 10, 10, 0.9)
+          ),
+          url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="%234ECDC4" opacity="0.05" d="M0,0 L100,0 L100,100 L0,100 Z"/></svg>');
+        background-size: cover;
+      }
+
+      .hero-content {
+        max-width: 600px;
+        animation: fadeIn 1s 0.2s forwards;
+        opacity: 0;
+      }
+
+      .hero-content h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        line-height: 1.2;
+      }
+
+      .hero-content h1 span {
+        color: var(--light);
+      }
+
+      .hero-content p {
+        font-size: 18px;
+        margin-bottom: 30px;
+        color: var(--light-secondary);
+      }
+
+      .hero-image {
+        position: relative;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 8px solid rgba(78, 205, 196, 0.2);
+        box-shadow: 0 0 30px rgba(78, 205, 196, 0.2);
+        transition: all 0.5s;
+        animation: fadeIn 1s 0.4s forwards, float 6s ease-in-out infinite;
+        opacity: 0;
+      }
+
+      .hero-image:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 50px rgba(78, 205, 196, 0.3);
+      }
+
+      .hero-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .social-icons {
+        display: flex;
+        margin-top: 30px;
+      }
+
+      .social-icons a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        background-color: var(--dark-secondary);
+        border-radius: 50%;
+        margin-right: 15px;
+        transition: all 0.3s;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        color: var(--primary);
+      }
+
+      .social-icons a:hover {
+        background-color: var(--primary);
+        color: var(--dark);
+        transform: translateY(-5px);
+      }
+
+      /* About Section */
+      .about-container {
+        display: flex;
+        align-items: center;
+        gap: 50px;
+      }
+
+      .about-text {
+        flex: 1;
+      }
+
+      .skills {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .skill-item {
+        background-color: var(--card-bg);
+        padding: 25px;
+        border-radius: 10px;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid var(--primary);
+      }
+
+      .skill-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(78, 205, 196, 0.2);
+      }
+
+      .skill-item h3 {
+        margin-bottom: 10px;
+        color: var(--light);
+      }
+
+      /* Education Section */
+      .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 50px auto;
+      }
+
+      .timeline::after {
+        content: "";
+        position: absolute;
+        width: 4px;
+        background: linear-gradient(
+          to bottom,
+          var(--primary),
+          var(--accent-blue)
+        );
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -2px;
+      }
+
+      .timeline-item {
+        padding: 10px 40px;
+        position: relative;
+        width: 50%;
+        box-sizing: border-box;
+        margin-bottom: 30px;
+      }
+
+      .timeline-item::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: var(--dark);
+        border: 4px solid var(--primary);
+        border-radius: 50%;
+        top: 15px;
+        z-index: 1;
+      }
+
+      .left {
+        left: 0;
+      }
+
+      .right {
+        left: 50%;
+      }
+
+      .left::after {
+        right: -12px;
+      }
+
+      .right::after {
+        left: -12px;
+      }
+
+      .timeline-content {
+        padding: 25px;
+        background-color: var(--card-bg);
+        border-radius: 10px;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .timeline-content:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(78, 205, 196, 0.2);
+      }
+
+      .timeline-content h3 {
+        margin-bottom: 10px;
+        color: var(--light);
+      }
+
+      .timeline-date {
+        color: var(--primary);
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: inline-block;
+        padding: 3px 10px;
+        background-color: rgba(78, 205, 196, 0.1);
+        border-radius: 20px;
+      }
+
+      /* Projects Section */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+      }
+
+      .project-card {
+        background-color: var(--card-bg);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(78, 205, 196, 0.2);
+      }
+
+      .project-image {
+        height: 200px;
+        overflow: hidden;
+      }
+
+      .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+      }
+
+      .project-card:hover .project-image img {
+        transform: scale(1.1);
+      }
+
+      .project-info {
+        padding: 25px;
+      }
+
+      .project-info h3 {
+        margin-bottom: 10px;
+        color: var(--light);
+      }
+
+      .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 15px 0;
+      }
+
+      .tag {
+        background-color: rgba(78, 205, 196, 0.1);
+        color: var(--primary);
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      /* Contact Section */
+      .contact-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+      }
+
+      .contact-card {
+        background-color: var(--card-bg);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        text-align: center;
+      }
+
+      .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(78, 205, 196, 0.2);
+      }
+
+      .contact-icon {
+        font-size: 40px;
+        margin-bottom: 20px;
+        color: var(--primary);
+      }
+
+      .contact-card h3 {
+        margin-bottom: 15px;
+        color: var(--light);
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 50px 10%;
+        background-color: var(--dark-secondary);
+        color: var(--light);
+      }
+
+      .footer-logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary);
+        margin-bottom: 20px;
+      }
+
+      .footer-logo span {
+        color: var(--light);
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+      }
+
+      .footer-links a {
+        margin: 0 15px;
+        color: var(--light);
+      }
+
+      .footer-links a:hover {
+        color: var(--primary);
+      }
+
+      .copyright {
+        color: var(--light-secondary);
+        font-size: 14px;
+      }
+
+      /* Efectos especiales */
+      .floating-shapes {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+      }
+
+      .shape {
+        position: absolute;
+        background-color: rgba(78, 205, 196, 0.05);
+        border-radius: 50%;
+        animation: float linear infinite;
+      }
+
+      /* Responsive */
+      @media (max-width: 992px) {
+        .hero-image {
+          width: 300px;
+          height: 300px;
+        }
+
+        .about-container {
+          flex-direction: column;
+        }
+
+        .timeline::after {
+          left: 31px;
+        }
+
+        .timeline-item {
+          width: 100%;
+          padding-left: 70px;
+          padding-right: 25px;
+        }
+
+        .timeline-item::after {
+          left: 21px;
+        }
+
+        .left::after,
+        .right::after {
+          left: 21px;
+        }
+
+        .right {
+          left: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        header {
+          padding: 20px 5%;
+        }
+
+        .menu-toggle {
+          display: block;
+        }
+
+        nav {
+          position: fixed;
+          top: 80px;
+          left: -100%;
+          width: 80%;
+          height: calc(100vh - 80px);
+          background-color: var(--dark-secondary);
+          transition: all 0.3s;
+          padding: 40px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        nav.active {
+          left: 0;
+        }
+
+        nav ul {
+          flex-direction: column;
+        }
+
+        nav ul li {
+          margin: 15px 0;
+        }
+
+        #hero {
+          flex-direction: column-reverse;
+          text-align: center;
+          padding-top: 180px;
+        }
+
+        .hero-content {
+          margin-top: 50px;
+        }
+
+        .skills {
+          grid-template-columns: 1fr;
+          margin-top: 30px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        section {
+          padding: 80px 5%;
+        }
+
+        .hero-image {
+          width: 250px;
+          height: 250px;
+        }
+
+        .hero-content h1 {
+          font-size: 36px;
+        }
+
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="header">
+      <div class="logo">Jahir<span>Vera</span></div>
+      <div class="menu-toggle">☰</div>
+      <nav>
+        <ul>
+          <li><a href="#hero">Inicio</a></li>
+          <li><a href="#about">Sobre mí</a></li>
+          <li><a href="#education">Formación</a></li>
+          <li><a href="#projects">Proyectos</a></li>
+          <li><a href="#contact">Contacto</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="floating-shapes" id="shapes"></div>
+
+    <section id="hero">
+      <div class="hero-content">
+        <h1>Hola, soy <span>Jahir Vera</span></h1>
+        <h2>Desarrollador Backend</h2>
+        <p>
+          Soy aprendiz del SENA en Análisis y Desarrollo de Software, apasionado
+          por la tecnología, con experiencia desarrollando proyectos backend con
+          Java y Spring Boot.
+        </p>
+        <a href="#contact" class="btn">Contáctame</a>
+
+        <div class="social-icons">
+          <a
+            href="https://github.com/jahirtheprogramer"
+            target="_blank"
+            title="GitHub"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="pngwing.com.png" alt="Jahir Vera" />
+      </div>
+    </section>
+
+    <section id="about">
+      <h2>Sobre mí</h2>
+      <div class="about-container">
+        <div class="about-text">
+          <p>
+            Soy aprendiz del SENA en Análisis y Desarrollo de Software,
+            apasionado por la tecnología, con experiencia desarrollando
+            proyectos backend con Java y Spring Boot. Me destaco por mi enfoque
+            en buenas prácticas, arquitectura limpia y soluciones funcionales
+            para pequeñas empresas.
+          </p>
+
+          <h3>Datos personales</h3>
+          <p><strong>Nombre completo:</strong> Jahir Vera López</p>
+          <p><strong>Edad:</strong> 19 años</p>
+          <p><strong>Ciudad:</strong> Cúcuta, Norte de Santander</p>
+          <p><strong>Correo electrónico:</strong> kevinvieralopez@gmail.com</p>
+          <p><strong>Teléfono:</strong> 320 8932635</p>
+        </div>
+
+        <div class="skills">
+          <h3>Habilidades técnicas</h3>
+          <div class="skill-item">
+            <h3>Lenguajes</h3>
+            <p>Java, JavaScript, SQL, HTML, CSS</p>
+          </div>
+          <div class="skill-item">
+            <h3>Frameworks y herramientas</h3>
+            <p>Spring Boot, Postman, Git, JPA/Hibernate, VS Code</p>
+          </div>
+          <div class="skill-item">
+            <h3>Bases de datos</h3>
+            <p>MySQL</p>
+          </div>
+          <div class="skill-item">
+            <h3>Principios</h3>
+            <p>POO, Arquitectura MVC, Clean Architecture</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education">
+      <h2>Formación Académica</h2>
+      <div class="timeline">
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <div class="timeline-date">2023 - 2026 (En curso)</div>
+            <h3>Tecnólogo – Análisis y Desarrollo de Software</h3>
+            <p>Servicio Nacional de Aprendizaje (SENA)</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <div class="timeline-date">2023</div>
+            <h3>Bootcamp de Programación (159 horas)</h3>
+            <p>Ministerio TIC & ANDES</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <div class="timeline-date">Graduado: 2022</div>
+            <h3>Bachiller Académico</h3>
+            <p>Institución Educativa Colegio Técnico Municipal Aeropuerto</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Proyectos destacados</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-image">
+            <img src="image.png" alt="CRM de Ventas" />
+          </div>
+          <div class="project-info">
+            <h3>CRM de Ventas</h3>
+            <div class="project-tags">
+              <span class="tag">Java</span>
+              <span class="tag">Spring Boot</span>
+              <span class="tag">MySQL</span>
+            </div>
+            <p>
+              Sistema de gestión de ventas desarrollado con arquitectura MVC.
+              Permite administrar productos, clientes, ventas y usuarios.
+              Incluye autenticación personalizada y lógica backend sólida.
+            </p>
+            <a
+              href="https://github.com/jahirtheprogramer"
+              target="_blank"
+              class="btn"
+              >Ver en GitHub</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contacto</h2>
+      <div class="contact-container">
+        <div class="contact-card">
+          <div class="contact-icon">✉️</div>
+          <h3>Correo electrónico</h3>
+          <a href="mailto:kevinvieralopez@gmail.com"
+            >kevinnveralopez@gmail.com</a
+          >
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon">📱</div>
+          <h3>Teléfono</h3>
+          <a href="tel:+573208932635">320 8932635</a>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon">🔗</div>
+          <h3>GitHub</h3>
+          <a href="https://github.com/jahirtheprogramer" target="_blank"
+            >jahirtheprogramer</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-logo">Jahir<span>Vera</span></div>
+      <div class="footer-links">
+        <a href="#hero">Inicio</a>
+        <a href="#about">Sobre mí</a>
+        <a href="#education">Formación</a>
+        <a href="#projects">Proyectos</a>
+        <a href="#contact">Contacto</a>
+      </div>
+      <p class="copyright">
+        © 2023 Jahir Vera López. Todos los derechos reservados.
+      </p>
+    </footer>
+
+    <script>
+      // Menú responsive
+      const menuToggle = document.querySelector(".menu-toggle");
+      const nav = document.querySelector("nav");
+
+      menuToggle.addEventListener("click", () => {
+        nav.classList.toggle("active");
+      });
+
+      // Cerrar menú al hacer clic en un enlace
+      const navLinks = document.querySelectorAll("nav ul li a");
+      navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          nav.classList.remove("active");
+        });
+      });
+
+      // Header scroll effect
+      const header = document.getElementById("header");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          header.classList.add("scrolled");
+        } else {
+          header.classList.remove("scrolled");
+        }
+      });
+
+      // Animación de scroll suave
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          const targetElement = document.querySelector(targetId);
+
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: "smooth",
+          });
+        });
+      });
+
+      // Animación de secciones al hacer scroll
+      const sections = document.querySelectorAll("section");
+
+      function checkScroll() {
+        sections.forEach((section) => {
+          const sectionTop = section.getBoundingClientRect().top;
+          const windowHeight = window.innerHeight;
+
+          if (sectionTop < windowHeight - 100) {
+            section.style.opacity = "1";
+          }
+        });
+      }
+
+      window.addEventListener("scroll", checkScroll);
+      window.addEventListener("load", checkScroll);
+
+      // Efecto de formas flotantes
+      const shapesContainer = document.getElementById("shapes");
+      const shapeCount = 15;
+
+      for (let i = 0; i < shapeCount; i++) {
+        const shape = document.createElement("div");
+        shape.classList.add("shape");
+
+        // Tamaño aleatorio entre 50px y 200px
+        const size = Math.random() * 150 + 50;
+        shape.style.width = `${size}px`;
+        shape.style.height = `${size}px`;
+
+        // Posición aleatoria
+        shape.style.left = `${Math.random() * 100}%`;
+        shape.style.top = `${Math.random() * 100}%`;
+
+        // Duración de animación aleatoria
+        const duration = Math.random() * 30 + 20;
+        shape.style.animationDuration = `${duration}s`;
+
+        // Retraso de animación aleatorio
+        shape.style.animationDelay = `${Math.random() * 10}s`;
+
+        shapesContainer.appendChild(shape);
+      }
+
+      // Efecto de escritura en el título
+      const heroTitle = document.querySelector("#hero h1");
+      const originalText = heroTitle.textContent;
+      heroTitle.textContent = "";
+
+      let i = 0;
+      function typeWriter() {
+        if (i < originalText.length) {
+          heroTitle.textContent += originalText.charAt(i);
+          i++;
+          setTimeout(typeWriter, 100);
+        }
+      }
+
+      // Iniciar efecto después de 1 segundo
+      setTimeout(typeWriter, 1000);
+    </script>
+  </body>
+</html>
